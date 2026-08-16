@@ -17,6 +17,20 @@ public enum APIEndpoint {
     public static let startScan = "/api/v1/scan/start"
     public static let stop = "/api/v1/stop"
     public static let recorderStatus = "/api/v1/recorder/status"
+
+    public static let devices = "/api/v1/devices"
+    public static let startDevice = "/api/v1/devices/start"
+
+    public static let recordings = "/api/v1/recordings"
+
+    public static let controlBoothStatus = "/api/v1/controlbooth/status"
+    public static let controlBoothLaunch = "/api/v1/controlbooth/launch"
+    public static let controlBoothStart = "/api/v1/controlbooth/start"
+    public static let controlBoothStop = "/api/v1/controlbooth/stop"
+
+    public static let airPlayStatus = "/api/v1/airplay/status"
+    public static let airPlayListen = "/api/v1/airplay/listen"
+    public static let airPlayStop = "/api/v1/airplay/stop"
 }
 
 /// Schema version this build of `AntennaHeadAPI` implements. Intended to

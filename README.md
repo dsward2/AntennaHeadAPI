@@ -11,15 +11,14 @@ This is a sibling repo in the `antennahead-umbrella` workspace, following the
 same manifest+bootstrap convention as `PipelineHelpers`, `AirPlayReceiver`,
 and `SharedLogging` — see `antennahead-workspace/README.md`.
 
-## Status: scaffolding, not yet wired up
+## Status: wired up, powering a real client
 
-This package defines the contract types and route constants. It is **not
-yet imported by `AntennaHeadHTTPServer`** — none of AntennaHead's existing
-routes have been changed, and no `tvOS`/`watchOS` app targets exist yet.
-`AntennaHead/Services/AntennaHeadHTTPServer.swift` currently has substantial
-uncommitted local changes of its own (see the umbrella project notes), so
-wiring this package into it deliberately wasn't started in the same pass —
-that's the next step, once those changes are accounted for.
+Imported by `AntennaHeadHTTPServer` (the `/api/v1/...` routes, additive
+alongside every existing `*.html` route) and by
+[AntennaHeadTV](https://github.com/dsward2/AntennaHeadTV), the tvOS client
+that's exercised the whole contract end to end on real hardware — including
+audio playback via the HLS mount these types don't cover directly (that's a
+separate, pre-existing route; see `AntennaHeadTV`'s README).
 
 ## What's here
 
@@ -30,7 +29,11 @@ that's the next step, once those changes are accounted for.
 | `CategorySummary` | Client-facing view of a `Category` row, same reasoning. |
 | `NowPlayingStatus` | Replaces the ad hoc dictionary `nowPlayingStatusJSON()` builds today for `/nowplayingstatus.html`. |
 | `AACRecorderStatus` | Matches the existing `/api/aac-recorder/status` JSON shape as-is — that endpoint was already client-shaped. |
-| `TuneFrequencyRequest`, `StartCategoryScanRequest` | Request bodies for the JSON-API equivalents of `/frequencylistenbuttonclicked.html` and `/scannerlistenbuttonclicked.html`. |
+| `DeviceSummary` | A Core Audio input device (mirrors `AudioInputDevices.names()`); the name doubles as its ID. |
+| `RecordingSummary` | A file in the shared Recordings folder, carrying a ready-to-use `downloadPath` for AntennaHead's existing Range-capable `/recordings-download/...` route — see its doc comment for why playback goes through that route rather than a new one. |
+| `ControlBoothStatus` | Whether ControlBooth is running and, if so, its pipeline names (mirrors `controlBoothPageHTML()`). |
+| `AirPlayReceiverStatus` | Whether the AirPlay Receiver capture pipeline is running, plus its last error (mirrors `airPlayPageHTML()`). |
+| `TuneFrequencyRequest`, `StartCategoryScanRequest`, `StartDeviceRequest`, `StartControlBoothPipelineRequest` | Request bodies for the JSON-API equivalents of the corresponding `*listenbuttonclicked.html` form POSTs. |
 | `APIError` | Matches the existing `{"error": ...}` shape from `jsonErrorResponse(_:status:)`. |
 | `APIEndpoint` | Named route constants under `/api/v1/...` — additive, zero collision risk against the existing `*.html` fragment routes or the pre-existing `/api/aac-recorder/*` routes. |
 | `APIVersion` | Single source of truth for the schema version; not yet wired into any response. |
@@ -53,13 +56,14 @@ that's the next step, once those changes are accounted for.
   side-by-side during a client migration instead of forcing a flag day, and
   so none of this collides with the existing `*.html` routes.
 
-## Next steps (not started)
+## Next steps
 
-1. Wire these types into `AntennaHeadHTTPServer` behind the `/api/v1/...`
-   routes, additive to the existing HTML routes.
-2. Stand up minimal tvOS and watchOS app targets that import this package.
-3. Once there's a real client, consider upgrading `/api/v1/now-playing` from
-   polling to a push channel (SSE/WebSocket).
+1. Stand up a watchOS app target that imports this package — the tvOS client
+   is the only consumer so far.
+2. Bonjour-based discovery and HTTPS/Basic Auth support, both still open in
+   every client (see the feasibility study and each client's own README).
+3. Now that there's a real client, consider upgrading `/api/v1/now-playing`
+   from polling to a push channel (SSE/WebSocket).
 
 ## Building
 
