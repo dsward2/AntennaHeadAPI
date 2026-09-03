@@ -85,13 +85,6 @@ final class AntennaHeadAPITests: XCTestCase {
         XCTAssertEqual(decoded.pipelineNames, ["KUAR-FM", "KABF-FM"])
     }
 
-    func testAirPlayReceiverStatusRoundTrips() throws {
-        let value = AirPlayReceiverStatus(isRunning: false, lastError: "could not establish a service on port 5000")
-        let decoded = try JSONDecoder().decode(AirPlayReceiverStatus.self, from: JSONEncoder().encode(value))
-        XCTAssertFalse(decoded.isRunning)
-        XCTAssertEqual(decoded.lastError, "could not establish a service on port 5000")
-    }
-
     func testEndpointsAreNamespacedUnderAPIv1() {
         let paths = [
             APIEndpoint.categories, APIEndpoint.favorites, APIEndpoint.nowPlaying,
@@ -100,7 +93,6 @@ final class AntennaHeadAPITests: XCTestCase {
             APIEndpoint.recordings,
             APIEndpoint.controlBoothStatus, APIEndpoint.controlBoothLaunch,
             APIEndpoint.controlBoothStart, APIEndpoint.controlBoothStop,
-            APIEndpoint.airPlayStatus, APIEndpoint.airPlayListen, APIEndpoint.airPlayStop,
         ]
         for path in paths {
             XCTAssertTrue(path.hasPrefix("/api/v1/"), "\(path) should live under /api/v1/")

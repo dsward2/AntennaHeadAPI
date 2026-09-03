@@ -32,7 +32,6 @@ separate, pre-existing route; see `AntennaHeadTV`'s README).
 | `DeviceSummary` | A Core Audio input device (mirrors `AudioInputDevices.names()`); the name doubles as its ID. |
 | `RecordingSummary` | A file in the shared Recordings folder, carrying a ready-to-use `downloadPath` for AntennaHead's existing Range-capable `/recordings-download/...` route — see its doc comment for why playback goes through that route rather than a new one. |
 | `ControlBoothStatus` | Whether ControlBooth is running and, if so, its pipeline names (mirrors `controlBoothPageHTML()`). |
-| `AirPlayReceiverStatus` | Whether the AirPlay Receiver capture pipeline is running, plus its last error (mirrors `airPlayPageHTML()`). |
 | `TuneFrequencyRequest`, `StartCategoryScanRequest`, `StartDeviceRequest`, `StartControlBoothPipelineRequest` | Request bodies for the JSON-API equivalents of the corresponding `*listenbuttonclicked.html` form POSTs. |
 | `APIError` | Matches the existing `{"error": ...}` shape from `jsonErrorResponse(_:status:)`. |
 | `APIEndpoint` | Named route constants under `/api/v1/...` — additive, zero collision risk against the existing `*.html` fragment routes or the pre-existing `/api/aac-recorder/*` routes. |
