@@ -45,3 +45,21 @@ public struct StartControlBoothPipelineRequest: Codable, Sendable {
         self.pipelineName = pipelineName
     }
 }
+
+/// Request body for updating live spatial-audio position — the JSON-API
+/// equivalent of the web UI's `/api/spatial-audio/update` route (see
+/// `AntennaHeadHTTPServer.updateSpatialAudio(fromBody:)`). Any subset of the
+/// three fields may be present; each one present updates independently, so
+/// e.g. an azimuth-only change doesn't require resending elevation and
+/// distance too.
+public struct SetSpatialAudioRequest: Codable, Sendable {
+    public let azimuth: Double?
+    public let elevation: Double?
+    public let distance: Double?
+
+    public init(azimuth: Double? = nil, elevation: Double? = nil, distance: Double? = nil) {
+        self.azimuth = azimuth
+        self.elevation = elevation
+        self.distance = distance
+    }
+}
