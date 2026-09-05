@@ -27,6 +27,11 @@ public enum APIEndpoint {
     public static let controlBoothLaunch = "/api/v1/controlbooth/launch"
     public static let controlBoothStart = "/api/v1/controlbooth/start"
     public static let controlBoothStop = "/api/v1/controlbooth/stop"
+
+    /// Deliberately *not* under `/api/v1` — this is the pre-existing
+    /// `captions.html` polling route (`AntennaHeadHTTPServer.captionsJSON()`),
+    /// reused as-is rather than duplicated under the versioned namespace.
+    public static let captions = "/captions.json"
 }
 
 /// Schema version this build of `AntennaHeadAPI` implements. Intended to
