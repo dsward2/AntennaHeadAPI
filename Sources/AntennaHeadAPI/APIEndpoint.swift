@@ -28,6 +28,9 @@ public enum APIEndpoint {
     public static let controlBoothStart = "/api/v1/controlbooth/start"
     public static let controlBoothStop = "/api/v1/controlbooth/stop"
 
+    public static let spatialAudio = "/api/v1/spatial-audio"
+    public static let setSpatialAudio = "/api/v1/spatial-audio/set"
+
     /// Deliberately *not* under `/api/v1` — this is the pre-existing
     /// `captions.html` polling route (`AntennaHeadHTTPServer.captionsJSON()`),
     /// reused as-is rather than duplicated under the versioned namespace.

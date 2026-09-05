@@ -85,6 +85,33 @@ final class AntennaHeadAPITests: XCTestCase {
         XCTAssertEqual(decoded.pipelineNames, ["KUAR-FM", "KABF-FM"])
     }
 
+    func testSpatialAudioStatusRoundTrips() throws {
+        let value = SpatialAudioStatus(enabled: true, azimuth: 112, elevation: -15, distance: 2.1)
+        let decoded = try JSONDecoder().decode(SpatialAudioStatus.self, from: JSONEncoder().encode(value))
+        XCTAssertEqual(decoded.enabled, true)
+        XCTAssertEqual(decoded.azimuth, 112)
+        XCTAssertEqual(decoded.elevation, -15)
+        XCTAssertEqual(decoded.distance, 2.1)
+    }
+
+    /// A partial request (only one field set) should encode its other fields
+    /// as JSON `null` and decode back to `nil`, not be dropped or default to
+    /// zero — the server relies on `nil` meaning "leave this alone", not
+    /// "set it to zero" (see `AntennaHeadHTTPServer.applySpatialAudio`).
+    func testSetSpatialAudioRequestRoundTripsWithPartialFields() throws {
+        let azimuthOnly = SetSpatialAudioRequest(azimuth: 45)
+        let decoded = try JSONDecoder().decode(SetSpatialAudioRequest.self, from: JSONEncoder().encode(azimuthOnly))
+        XCTAssertEqual(decoded.azimuth, 45)
+        XCTAssertNil(decoded.elevation)
+        XCTAssertNil(decoded.distance)
+
+        let all = SetSpatialAudioRequest(azimuth: -90, elevation: 30, distance: 0.5)
+        let decodedAll = try JSONDecoder().decode(SetSpatialAudioRequest.self, from: JSONEncoder().encode(all))
+        XCTAssertEqual(decodedAll.azimuth, -90)
+        XCTAssertEqual(decodedAll.elevation, 30)
+        XCTAssertEqual(decodedAll.distance, 0.5)
+    }
+
     func testEndpointsAreNamespacedUnderAPIv1() {
         let paths = [
             APIEndpoint.categories, APIEndpoint.favorites, APIEndpoint.nowPlaying,
@@ -93,6 +120,7 @@ final class AntennaHeadAPITests: XCTestCase {
             APIEndpoint.recordings,
             APIEndpoint.controlBoothStatus, APIEndpoint.controlBoothLaunch,
             APIEndpoint.controlBoothStart, APIEndpoint.controlBoothStop,
+            APIEndpoint.spatialAudio, APIEndpoint.setSpatialAudio,
         ]
         for path in paths {
             XCTAssertTrue(path.hasPrefix("/api/v1/"), "\(path) should live under /api/v1/")
