@@ -83,6 +83,17 @@ final class AntennaHeadAPITests: XCTestCase {
         let decoded = try JSONDecoder().decode(ControlBoothStatus.self, from: JSONEncoder().encode(value))
         XCTAssertTrue(decoded.isRunning)
         XCTAssertEqual(decoded.pipelineNames, ["KUAR-FM", "KABF-FM"])
+        XCTAssertNil(decoded.activePipelineName)
+    }
+
+    func testControlBoothStatusActivePipelineNameRoundTripsAndIsOptional() throws {
+        let value = ControlBoothStatus(isRunning: true, pipelineNames: ["KUAR-FM"], activePipelineName: "KUAR-FM")
+        let decoded = try JSONDecoder().decode(ControlBoothStatus.self, from: JSONEncoder().encode(value))
+        XCTAssertEqual(decoded.activePipelineName, "KUAR-FM")
+
+        // A server that predates the field omits the key entirely.
+        let legacy = Data(#"{"isRunning":true,"pipelineNames":["A"]}"#.utf8)
+        XCTAssertNil(try JSONDecoder().decode(ControlBoothStatus.self, from: legacy).activePipelineName)
     }
 
     func testSpatialAudioStatusRoundTrips() throws {
