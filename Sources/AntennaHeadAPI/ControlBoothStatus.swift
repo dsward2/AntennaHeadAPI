@@ -12,10 +12,27 @@ public struct ControlBoothStatus: Codable, Sendable {
     /// when none is. Optional so older servers/clients that omit it still
     /// decode.
     public let activePipelineName: String?
+    /// Whether ControlBooth's AirPlay Receiver is on at all (advertising and
+    /// decoding, independent of whether it's relaying to AntennaHead). `nil`
+    /// when `isRunning` is `false`, or an older ControlBooth couldn't be
+    /// asked. Optional so older servers/clients that predate the AirPlay
+    /// receiver still decode.
+    public let airPlayEnabled: Bool?
+    /// Whether ControlBooth's AirPlay Receiver is currently relaying decoded
+    /// PCM to AntennaHead — the state the "airplay/start"/"airplay/stop"
+    /// endpoints toggle.
+    public let airPlayRelayEnabled: Bool?
+    /// Whether an AirPlay client is actively streaming right now, as opposed
+    /// to the receiver just advertising/idle.
+    public let airPlayReceivingAudio: Bool?
 
-    public init(isRunning: Bool, pipelineNames: [String], activePipelineName: String? = nil) {
+    public init(isRunning: Bool, pipelineNames: [String], activePipelineName: String? = nil,
+               airPlayEnabled: Bool? = nil, airPlayRelayEnabled: Bool? = nil, airPlayReceivingAudio: Bool? = nil) {
         self.isRunning = isRunning
         self.pipelineNames = pipelineNames
         self.activePipelineName = activePipelineName
+        self.airPlayEnabled = airPlayEnabled
+        self.airPlayRelayEnabled = airPlayRelayEnabled
+        self.airPlayReceivingAudio = airPlayReceivingAudio
     }
 }

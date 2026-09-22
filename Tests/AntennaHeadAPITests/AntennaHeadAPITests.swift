@@ -86,6 +86,22 @@ final class AntennaHeadAPITests: XCTestCase {
         XCTAssertNil(decoded.activePipelineName)
     }
 
+    func testControlBoothStatusAirPlayFieldsRoundTripAndAreOptional() throws {
+        let value = ControlBoothStatus(isRunning: true, pipelineNames: [],
+                                       airPlayEnabled: true, airPlayRelayEnabled: false, airPlayReceivingAudio: true)
+        let decoded = try JSONDecoder().decode(ControlBoothStatus.self, from: JSONEncoder().encode(value))
+        XCTAssertEqual(decoded.airPlayEnabled, true)
+        XCTAssertEqual(decoded.airPlayRelayEnabled, false)
+        XCTAssertEqual(decoded.airPlayReceivingAudio, true)
+
+        // A server that predates the AirPlay receiver omits these keys entirely.
+        let legacy = Data(#"{"isRunning":true,"pipelineNames":["A"]}"#.utf8)
+        let legacyDecoded = try JSONDecoder().decode(ControlBoothStatus.self, from: legacy)
+        XCTAssertNil(legacyDecoded.airPlayEnabled)
+        XCTAssertNil(legacyDecoded.airPlayRelayEnabled)
+        XCTAssertNil(legacyDecoded.airPlayReceivingAudio)
+    }
+
     func testControlBoothStatusActivePipelineNameRoundTripsAndIsOptional() throws {
         let value = ControlBoothStatus(isRunning: true, pipelineNames: ["KUAR-FM"], activePipelineName: "KUAR-FM")
         let decoded = try JSONDecoder().decode(ControlBoothStatus.self, from: JSONEncoder().encode(value))
@@ -131,6 +147,7 @@ final class AntennaHeadAPITests: XCTestCase {
             APIEndpoint.recordings,
             APIEndpoint.controlBoothStatus, APIEndpoint.controlBoothLaunch,
             APIEndpoint.controlBoothStart, APIEndpoint.controlBoothStop,
+            APIEndpoint.controlBoothAirPlayStart, APIEndpoint.controlBoothAirPlayStop,
             APIEndpoint.spatialAudio, APIEndpoint.setSpatialAudio,
         ]
         for path in paths {

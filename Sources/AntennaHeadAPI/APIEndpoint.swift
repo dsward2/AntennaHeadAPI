@@ -27,6 +27,12 @@ public enum APIEndpoint {
     public static let controlBoothLaunch = "/api/v1/controlbooth/launch"
     public static let controlBoothStart = "/api/v1/controlbooth/start"
     public static let controlBoothStop = "/api/v1/controlbooth/stop"
+    /// No request body: unlike `controlBoothStart`, there's only one AirPlay
+    /// receiver per ControlBooth, not a name to pick. Status rides the
+    /// existing `controlBoothStatus` response's `airPlay*` fields rather than
+    /// a separate endpoint.
+    public static let controlBoothAirPlayStart = "/api/v1/controlbooth/airplay/start"
+    public static let controlBoothAirPlayStop = "/api/v1/controlbooth/airplay/stop"
 
     public static let spatialAudio = "/api/v1/spatial-audio"
     public static let setSpatialAudio = "/api/v1/spatial-audio/set"
