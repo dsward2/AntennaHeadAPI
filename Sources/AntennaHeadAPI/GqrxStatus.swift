@@ -13,3 +13,25 @@ public struct GqrxStatus: Codable, Sendable {
         self.receivePort = receivePort
     }
 }
+
+/// One of Gqrx's own bookmarks (mirrors `GqrxBookmark`, from Gqrx's
+/// `\get_bookmarks` remote-control command, which needs a Gqrx build carrying
+/// PR #1464). The frequency doubles as its ID, the same as the web page's
+/// Tune buttons.
+public struct GqrxBookmarkSummary: Codable, Identifiable, Hashable, Sendable {
+    public var id: Int64 { frequencyHz }
+    public let frequencyHz: Int64
+    public let name: String
+    /// Gqrx's demodulator name, e.g. "WFM (stereo)" or "Narrow FM".
+    public let modulation: String
+    public let bandwidthHz: Int
+    public let tags: [String]
+
+    public init(frequencyHz: Int64, name: String, modulation: String, bandwidthHz: Int, tags: [String]) {
+        self.frequencyHz = frequencyHz
+        self.name = name
+        self.modulation = modulation
+        self.bandwidthHz = bandwidthHz
+        self.tags = tags
+    }
+}
