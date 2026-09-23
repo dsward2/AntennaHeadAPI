@@ -18,7 +18,9 @@ alongside every existing `*.html` route) and by
 [AntennaHeadTV](https://github.com/dsward2/AntennaHeadTV), the tvOS client
 that's exercised the whole contract end to end on real hardware — including
 audio playback via the HLS mount these types don't cover directly (that's a
-separate, pre-existing route; see `AntennaHeadTV`'s README).
+separate, pre-existing route; see `AntennaHeadTV`'s README). Also imported
+by [AntennaHeadiOS](https://github.com/dsward2/AntennaHeadiOS), the iPhone
+app, for its Lock Screen Now Playing details.
 
 ## What's here
 
