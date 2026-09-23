@@ -166,4 +166,28 @@ final class AntennaHeadAPITests: XCTestCase {
         let parsed = BonjourAdvertisement(txtRecord: [:])
         XCTAssertEqual(parsed, BonjourAdvertisement(apiVersion: 1, requiresAuth: false, httpsPort: nil))
     }
+
+    func testCaptionsStatusRoundTrips() throws {
+        let value = CaptionsStatus(enabled: true, live: "tower",
+                                   final: [CaptionLine(text: "Now playing KUAR.", isAnnouncement: true),
+                                           CaptionLine(text: "Good evening.")],
+                                   seq: 2)
+        let decoded = try JSONDecoder().decode(CaptionsStatus.self, from: JSONEncoder().encode(value))
+        XCTAssertEqual(decoded, value)
+    }
+
+    /// The exact shape AntennaHead's `/captions.json` serves — the drift this
+    /// guards against is the server changing `final` without this package.
+    func testCaptionsStatusDecodesServerPayload() throws {
+        let json = #"{"enabled":true,"final":[{"announcement":true,"text":"Scanning Aviation."},{"announcement":false,"text":"Cleared to land."}],"live":"","seq":2}"#
+        let decoded = try JSONDecoder().decode(CaptionsStatus.self, from: Data(json.utf8))
+        XCTAssertEqual(decoded.final, [CaptionLine(text: "Scanning Aviation.", isAnnouncement: true),
+                                       CaptionLine(text: "Cleared to land.")])
+    }
+
+    func testCaptionLineDecodesLegacyBareString() throws {
+        let json = #"{"enabled":true,"final":["Good evening."],"live":"","seq":1}"#
+        let decoded = try JSONDecoder().decode(CaptionsStatus.self, from: Data(json.utf8))
+        XCTAssertEqual(decoded.final, [CaptionLine(text: "Good evening.")])
+    }
 }
