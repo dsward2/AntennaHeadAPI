@@ -39,6 +39,10 @@ public enum APIEndpoint {
     /// page's "Launch Gqrx" button.
     public static let gqrxLaunch = "/api/v1/gqrx/launch"
     public static let gqrxStart = "/api/v1/gqrx/start"
+    /// Gqrx must be running. Served from AntennaHead's live connection while
+    /// it's listening to Gqrx, otherwise fetched from Gqrx on demand.
+    public static let gqrxBookmarks = "/api/v1/gqrx/bookmarks"
+    public static let gqrxBookmarkPlay = "/api/v1/gqrx/bookmarks/play"
 
     public static let audioFiles = "/api/v1/audio-files"
     public static let audioFilesStart = "/api/v1/audio-files/start"

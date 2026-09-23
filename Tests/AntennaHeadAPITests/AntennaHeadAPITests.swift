@@ -230,4 +230,16 @@ final class AntennaHeadAPITests: XCTestCase {
 
         XCTAssertEqual(try JSONDecoder().decode(StartGqrxRequest.self, from: JSONEncoder().encode(StartGqrxRequest(channels: 1))).channels, 1)
     }
+
+    func testGqrxBookmarkTypesRoundTrip() throws {
+        let bookmark = GqrxBookmarkSummary(frequencyHz: 162_550_000, name: "NOAA Little Rock", modulation: "Narrow FM",
+                                           bandwidthHz: 10_000, tags: ["Weather"])
+        XCTAssertEqual(try JSONDecoder().decode(GqrxBookmarkSummary.self, from: JSONEncoder().encode(bookmark)), bookmark)
+        XCTAssertEqual(bookmark.id, 162_550_000)
+
+        let request = PlayGqrxBookmarkRequest(frequencyHz: 162_550_000)
+        let decoded = try JSONDecoder().decode(PlayGqrxBookmarkRequest.self, from: JSONEncoder().encode(request))
+        XCTAssertEqual(decoded.frequencyHz, 162_550_000)
+        XCTAssertEqual(decoded.channels, 2)
+    }
 }

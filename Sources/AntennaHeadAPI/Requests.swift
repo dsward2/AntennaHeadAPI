@@ -124,3 +124,17 @@ public struct StartRSSHeadlinesRequest: Codable, Sendable {
         self.repeatForever = repeatForever
     }
 }
+
+/// Request body for playing one of Gqrx's bookmarks. Tunes Gqrx to it (with
+/// the bookmark's own mode and bandwidth), starting to listen to Gqrx first
+/// if AntennaHead isn't already. `channels` only matters in that case — see
+/// `StartGqrxRequest`.
+public struct PlayGqrxBookmarkRequest: Codable, Sendable {
+    public let frequencyHz: Int64
+    public let channels: Int
+
+    public init(frequencyHz: Int64, channels: Int = 2) {
+        self.frequencyHz = frequencyHz
+        self.channels = channels
+    }
+}
