@@ -63,3 +63,64 @@ public struct SetSpatialAudioRequest: Codable, Sendable {
         self.distance = distance
     }
 }
+
+/// Request body for listening to Gqrx — the JSON-API equivalent of
+/// `/gqrxlistenbuttonclicked.html`. `channels` must match Gqrx's own
+/// Audio ▸ Stereo setting: 2 when it's checked (Gqrx's default), 1 when not.
+public struct StartGqrxRequest: Codable, Sendable {
+    public let channels: Int
+
+    public init(channels: Int = 2) {
+        self.channels = channels
+    }
+}
+
+/// Request body for Play Audio Files — the JSON-API equivalent of
+/// `/playaudiofileslistenbuttonclicked.html`. A non-empty `playlistName` takes
+/// over entirely: its own files play in its own order, and `fileNames` and
+/// `sequence` are ignored. Otherwise `fileNames` picks which files in the
+/// folder to play (`nil` means all of them).
+public struct StartAudioFilesRequest: Codable, Sendable {
+    public let fileNames: [String]?
+    public let sequence: FileSequence
+    public let repeatForever: Bool
+    public let playlistName: String?
+
+    public init(fileNames: [String]? = nil, sequence: FileSequence = .chronological,
+                repeatForever: Bool = false, playlistName: String? = nil) {
+        self.fileNames = fileNames
+        self.sequence = sequence
+        self.repeatForever = repeatForever
+        self.playlistName = playlistName
+    }
+}
+
+/// Request body for Text to Speech — the JSON-API equivalent of
+/// `/texttospeechlistenbuttonclicked.html`. `fileNames` picks which `.txt`
+/// files in the folder to speak (`nil` means all of them).
+public struct StartTextToSpeechRequest: Codable, Sendable {
+    public let fileNames: [String]?
+    public let sequence: FileSequence
+    public let repeatForever: Bool
+
+    public init(fileNames: [String]? = nil, sequence: FileSequence = .chronological, repeatForever: Bool = false) {
+        self.fileNames = fileNames
+        self.sequence = sequence
+        self.repeatForever = repeatForever
+    }
+}
+
+/// Request body for Speak RSS Headlines — the JSON-API equivalent of
+/// `/speakrssheadlineslistenbuttonclicked.html`, always in its "use each
+/// feed's own voice" mode (the co-anchor voice pickers stay on the web page).
+public struct StartRSSHeadlinesRequest: Codable, Sendable {
+    public let feedIDs: [Int64]
+    public let itemsPerFeed: Int
+    public let repeatForever: Bool
+
+    public init(feedIDs: [Int64], itemsPerFeed: Int = 5, repeatForever: Bool = false) {
+        self.feedIDs = feedIDs
+        self.itemsPerFeed = itemsPerFeed
+        self.repeatForever = repeatForever
+    }
+}

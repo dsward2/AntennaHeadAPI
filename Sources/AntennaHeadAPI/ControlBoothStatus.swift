@@ -26,6 +26,17 @@ public struct ControlBoothStatus: Codable, Sendable {
     /// to the receiver just advertising/idle.
     public let airPlayReceivingAudio: Bool?
 
+    /// The `activePipelineName` AntennaHead reports while it's listening to
+    /// ControlBooth's AirPlay Receiver (which isn't a saved pipeline). Must
+    /// match ControlBooth's `AirPlayReceiverService.antennaHeadTaskName`.
+    public static let airPlaySourceName = "AirPlay Receiver"
+
+    /// Whether AntennaHead is currently listening to the AirPlay Receiver —
+    /// what decides Listen vs. Stop, like the web UI's ControlBooth page.
+    public var isListeningToAirPlay: Bool {
+        activePipelineName == Self.airPlaySourceName
+    }
+
     public init(isRunning: Bool, pipelineNames: [String], activePipelineName: String? = nil,
                airPlayEnabled: Bool? = nil, airPlayRelayEnabled: Bool? = nil, airPlayReceivingAudio: Bool? = nil) {
         self.isRunning = isRunning
