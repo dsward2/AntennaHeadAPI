@@ -34,6 +34,23 @@ public enum APIEndpoint {
     public static let controlBoothAirPlayStart = "/api/v1/controlbooth/airplay/start"
     public static let controlBoothAirPlayStop = "/api/v1/controlbooth/airplay/stop"
 
+    public static let gqrxStatus = "/api/v1/gqrx/status"
+    /// Launches Gqrx and starts listening to it in stereo, like the web
+    /// page's "Launch Gqrx" button.
+    public static let gqrxLaunch = "/api/v1/gqrx/launch"
+    public static let gqrxStart = "/api/v1/gqrx/start"
+
+    public static let audioFiles = "/api/v1/audio-files"
+    public static let audioFilesStart = "/api/v1/audio-files/start"
+
+    public static let textToSpeech = "/api/v1/text-to-speech"
+    public static let textToSpeechStart = "/api/v1/text-to-speech/start"
+
+    public static let rssFeeds = "/api/v1/rss-feeds"
+    /// Fetches and renders the headlines before responding, so this can take
+    /// several seconds.
+    public static let rssHeadlinesStart = "/api/v1/rss-headlines/start"
+
     public static let spatialAudio = "/api/v1/spatial-audio"
     public static let setSpatialAudio = "/api/v1/spatial-audio/set"
 

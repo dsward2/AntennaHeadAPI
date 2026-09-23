@@ -32,6 +32,10 @@ separate, pre-existing route; see `AntennaHeadTV`'s README).
 | `DeviceSummary` | A Core Audio input device (mirrors `AudioInputDevices.names()`); the name doubles as its ID. |
 | `RecordingSummary` | A file in the shared Recordings folder, carrying a ready-to-use `downloadPath` for AntennaHead's existing Range-capable `/recordings-download/...` route — see its doc comment for why playback goes through that route rather than a new one. |
 | `ControlBoothStatus` | Whether ControlBooth is running and, if so, its pipeline names (mirrors `controlBoothPageHTML()`). |
+| `GqrxStatus` | Whether Gqrx is running on the Mac and the UDP port AntennaHead receives its audio on (mirrors `gqrxFormHTML()`; the remote-control panel stays web-only). |
+| `FolderListing`, `FolderFile`, `FileSequence` | The files (and, for Play Audio Files, the playlists) in the Play Audio Files or Text to Speech folder chosen in Configuration, plus the Sequence choice. |
+| `RSSFeedSummary` | A subscribed feed on the Speak RSS Headlines page. |
+| `StartGqrxRequest`, `StartAudioFilesRequest`, `StartTextToSpeechRequest`, `StartRSSHeadlinesRequest` | Request bodies for the Listen buttons on the Devices sub-pages. |
 | `TuneFrequencyRequest`, `StartCategoryScanRequest`, `StartDeviceRequest`, `StartControlBoothPipelineRequest` | Request bodies for the JSON-API equivalents of the corresponding `*listenbuttonclicked.html` form POSTs. |
 | `APIError` | Matches the existing `{"error": ...}` shape from `jsonErrorResponse(_:status:)`. |
 | `APIEndpoint` | Named route constants under `/api/v1/...` — additive, zero collision risk against the existing `*.html` fragment routes or the pre-existing `/api/aac-recorder/*` routes. |

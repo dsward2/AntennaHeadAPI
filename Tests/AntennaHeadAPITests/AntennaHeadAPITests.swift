@@ -190,4 +190,44 @@ final class AntennaHeadAPITests: XCTestCase {
         let decoded = try JSONDecoder().decode(CaptionsStatus.self, from: Data(json.utf8))
         XCTAssertEqual(decoded.final, [CaptionLine(text: "Good evening.")])
     }
+
+    func testGqrxStatusRoundTrips() throws {
+        let decoded = try JSONDecoder().decode(GqrxStatus.self, from: JSONEncoder().encode(GqrxStatus(isRunning: true, receivePort: 7355)))
+        XCTAssertTrue(decoded.isRunning)
+        XCTAssertEqual(decoded.receivePort, 7355)
+    }
+
+    func testFolderListingRoundTrips() throws {
+        let file = FolderFile(name: "news.mp3", modifiedAt: Date(timeIntervalSince1970: 1_723_000_000), size: 1024)
+        let value = FolderListing(folderConfigured: true, folderPath: "/Users/me/Audio", files: [file], playlists: ["mix.m3u"])
+        let decoded = try JSONDecoder().decode(FolderListing.self, from: JSONEncoder().encode(value))
+        XCTAssertEqual(decoded.files, [file])
+        XCTAssertEqual(decoded.playlists, ["mix.m3u"])
+        XCTAssertEqual(decoded.folderPath, "/Users/me/Audio")
+    }
+
+    func testRSSFeedSummaryRoundTrips() throws {
+        let value = RSSFeedSummary(id: 7, name: "NPR", feedURL: "https://feeds.npr.org/1001/rss.xml")
+        XCTAssertEqual(try JSONDecoder().decode(RSSFeedSummary.self, from: JSONEncoder().encode(value)), value)
+    }
+
+    func testSourceRequestTypesRoundTrip() throws {
+        let audio = StartAudioFilesRequest(fileNames: ["a.mp3"], sequence: .random, repeatForever: true, playlistName: nil)
+        let decodedAudio = try JSONDecoder().decode(StartAudioFilesRequest.self, from: JSONEncoder().encode(audio))
+        XCTAssertEqual(decodedAudio.fileNames, ["a.mp3"])
+        XCTAssertEqual(decodedAudio.sequence, .random)
+        XCTAssertTrue(decodedAudio.repeatForever)
+
+        let tts = StartTextToSpeechRequest(fileNames: nil, sequence: .alphabetical)
+        let decodedTTS = try JSONDecoder().decode(StartTextToSpeechRequest.self, from: JSONEncoder().encode(tts))
+        XCTAssertNil(decodedTTS.fileNames)
+        XCTAssertEqual(decodedTTS.sequence, .alphabetical)
+
+        let rss = StartRSSHeadlinesRequest(feedIDs: [1, 2], itemsPerFeed: 3)
+        let decodedRSS = try JSONDecoder().decode(StartRSSHeadlinesRequest.self, from: JSONEncoder().encode(rss))
+        XCTAssertEqual(decodedRSS.feedIDs, [1, 2])
+        XCTAssertEqual(decodedRSS.itemsPerFeed, 3)
+
+        XCTAssertEqual(try JSONDecoder().decode(StartGqrxRequest.self, from: JSONEncoder().encode(StartGqrxRequest(channels: 1))).channels, 1)
+    }
 }
