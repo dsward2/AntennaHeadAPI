@@ -17,6 +17,7 @@ let package = Package(
     name: "AntennaHeadAPI",
     platforms: [
         .macOS(.v14),
+        .iOS(.v17),
         .tvOS(.v17),
         .watchOS(.v10)
     ],
