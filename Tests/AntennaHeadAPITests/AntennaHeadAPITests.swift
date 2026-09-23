@@ -155,4 +155,15 @@ final class AntennaHeadAPITests: XCTestCase {
         }
         XCTAssertEqual(Set(paths).count, paths.count, "endpoint paths should be unique")
     }
+
+    func testBonjourAdvertisementRoundTripsThroughTXTRecord() {
+        let value = BonjourAdvertisement(requiresAuth: true, httpsPort: 8094)
+        XCTAssertEqual(value.txtRecord, ["api": "1", "auth": "1", "https": "8094"])
+        XCTAssertEqual(BonjourAdvertisement(txtRecord: value.txtRecord), value)
+    }
+
+    func testBonjourAdvertisementToleratesMissingKeys() {
+        let parsed = BonjourAdvertisement(txtRecord: [:])
+        XCTAssertEqual(parsed, BonjourAdvertisement(apiVersion: 1, requiresAuth: false, httpsPort: nil))
+    }
 }
