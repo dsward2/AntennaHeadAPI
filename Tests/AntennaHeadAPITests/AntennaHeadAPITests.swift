@@ -57,7 +57,7 @@ final class AntennaHeadAPITests: XCTestCase {
         let device = StartDeviceRequest(deviceName: "Built-in Microphone")
         let decodedDevice = try JSONDecoder().decode(StartDeviceRequest.self, from: JSONEncoder().encode(device))
         XCTAssertEqual(decodedDevice.deviceName, "Built-in Microphone")
-        XCTAssertEqual(decodedDevice.audioOutputFilter, "vol 1")
+        XCTAssertEqual(decodedDevice.audioOutputFilter, "vol 4")
 
         let pipeline = StartControlBoothPipelineRequest(pipelineName: "KUAR-FM")
         XCTAssertEqual(try JSONDecoder().decode(StartControlBoothPipelineRequest.self, from: JSONEncoder().encode(pipeline)).pipelineName, "KUAR-FM")
