@@ -33,6 +33,12 @@ public enum APIEndpoint {
     /// a separate endpoint.
     public static let controlBoothAirPlayStart = "/api/v1/controlbooth/airplay/start"
     public static let controlBoothAirPlayStop = "/api/v1/controlbooth/airplay/stop"
+    /// Puts ControlBooth's AntennaHead Radio on the air / takes it off. No
+    /// request body. The station switches AntennaHead to itself a few seconds
+    /// after `radio/start` returns (and back to the filler after `radio/stop`),
+    /// so poll `controlBoothStatus`'s `radio*` fields for its progress.
+    public static let controlBoothRadioStart = "/api/v1/controlbooth/radio/start"
+    public static let controlBoothRadioStop = "/api/v1/controlbooth/radio/stop"
 
     public static let gqrxStatus = "/api/v1/gqrx/status"
     /// Launches Gqrx and starts listening to it in stereo, like the web
