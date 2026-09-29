@@ -40,6 +40,9 @@ public struct ControlBoothStatus: Codable, Sendable {
     /// The `activePipelineName` AntennaHead reports while it plays the station
     /// (normally "AntennaHead Radio").
     public let radioSourceName: String?
+    /// Whether `radio/skip` would do anything right now: on air between
+    /// segments, with a song playing and the announcer quiet.
+    public let radioCanSkip: Bool?
 
     /// The `activePipelineName` AntennaHead reports while it's listening to
     /// ControlBooth's AirPlay Receiver (which isn't a saved pipeline). Must
@@ -62,7 +65,7 @@ public struct ControlBoothStatus: Codable, Sendable {
     public init(isRunning: Bool, pipelineNames: [String], activePipelineName: String? = nil,
                airPlayEnabled: Bool? = nil, airPlayRelayEnabled: Bool? = nil, airPlayReceivingAudio: Bool? = nil,
                radioPhase: String? = nil, radioStatusText: String? = nil, radioNowPlaying: String? = nil,
-               radioLastError: String? = nil, radioSourceName: String? = nil) {
+               radioLastError: String? = nil, radioSourceName: String? = nil, radioCanSkip: Bool? = nil) {
         self.isRunning = isRunning
         self.pipelineNames = pipelineNames
         self.activePipelineName = activePipelineName
@@ -74,5 +77,6 @@ public struct ControlBoothStatus: Codable, Sendable {
         self.radioNowPlaying = radioNowPlaying
         self.radioLastError = radioLastError
         self.radioSourceName = radioSourceName
+        self.radioCanSkip = radioCanSkip
     }
 }

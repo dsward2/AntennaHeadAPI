@@ -39,6 +39,10 @@ public enum APIEndpoint {
     /// so poll `controlBoothStatus`'s `radio*` fields for its progress.
     public static let controlBoothRadioStart = "/api/v1/controlbooth/radio/start"
     public static let controlBoothRadioStop = "/api/v1/controlbooth/radio/stop"
+    /// Skips the station's current song: a gong, a fade, then the next song
+    /// (or a news/weather segment waiting for the song to end). No request
+    /// body. Does nothing unless `controlBoothStatus`'s `radioCanSkip` is true.
+    public static let controlBoothRadioSkip = "/api/v1/controlbooth/radio/skip"
 
     public static let gqrxStatus = "/api/v1/gqrx/status"
     /// Launches Gqrx and starts listening to it in stereo, like the web
