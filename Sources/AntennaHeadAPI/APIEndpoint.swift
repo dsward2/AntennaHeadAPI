@@ -44,6 +44,17 @@ public enum APIEndpoint {
     /// body. Does nothing unless `controlBoothStatus`'s `radioCanSkip` is true.
     public static let controlBoothRadioSkip = "/api/v1/controlbooth/radio/skip"
 
+    /// ControlBooth's dsd-neo Scanner: state, and the saved configurations
+    /// (AWIN, CWIN, …) with their control channels. Listen and Stop use
+    /// `controlBoothStart` / `controlBoothStop` with `DsdNeoStatus.pipelineName`.
+    public static let dsdNeoStatus = "/api/v1/dsdneo/status"
+    /// Switches the scanner to a configuration and control channel
+    /// (`SetDsdNeoConfigurationRequest`); a running scanner relaunches on it
+    /// within a few seconds. Answers with the new `DsdNeoStatus`.
+    public static let dsdNeoConfiguration = "/api/v1/dsdneo/configuration"
+    /// Leaves the call being heard. No request body.
+    public static let dsdNeoSkip = "/api/v1/dsdneo/skip"
+
     public static let gqrxStatus = "/api/v1/gqrx/status"
     /// Launches Gqrx and starts listening to it in stereo, like the web
     /// page's "Launch Gqrx" button.

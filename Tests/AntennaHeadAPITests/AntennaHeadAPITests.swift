@@ -243,3 +243,35 @@ final class AntennaHeadAPITests: XCTestCase {
         XCTAssertEqual(decoded.channels, 2)
     }
 }
+
+final class DsdNeoStatusTests: XCTestCase {
+    func testRoundTripsAndFindsTheActiveConfiguration() throws {
+        let cwin = DsdNeoStatus.Configuration(
+            id: "B", name: "CWIN",
+            controlChannels: [.init(hz: 854_362_500, label: "Clearwell Road"), .init(hz: 856_012_500, label: "")],
+            selectedControlChannelHz: 854_362_500)
+        let status = DsdNeoStatus(isRunning: true, installed: true, configured: true, state: "running",
+                                  pipelineName: "dsd-neo Scanner", isListening: true,
+                                  talkgroupText: "Fire (TG 3)", systemID: "927FA-00A",
+                                  controlChannelHz: 854_362_500,
+                                  configurations: [.init(id: "A", name: "AWIN", controlChannels: [], selectedControlChannelHz: 0), cwin],
+                                  activeConfigurationID: "B")
+        let decoded = try JSONDecoder().decode(DsdNeoStatus.self, from: JSONEncoder().encode(status))
+        XCTAssertEqual(decoded, status)
+        XCTAssertEqual(decoded.activeConfiguration?.name, "CWIN")
+        XCTAssertTrue(decoded.isActive)
+    }
+
+    func testControlChannelTitles() {
+        XCTAssertEqual(DsdNeoStatus.ControlChannel(hz: 854_362_500, label: "Clearwell Road").title,
+                       "854.3625 MHz — Clearwell Road")
+        XCTAssertEqual(DsdNeoStatus.ControlChannel(hz: 853_000_000, label: "").title, "853 MHz")
+    }
+
+    func testConfigurationRequestRoundTrips() throws {
+        let request = SetDsdNeoConfigurationRequest(configurationID: "B", controlChannelHz: 854_387_500)
+        let decoded = try JSONDecoder().decode(SetDsdNeoConfigurationRequest.self, from: JSONEncoder().encode(request))
+        XCTAssertEqual(decoded.configurationID, "B")
+        XCTAssertEqual(decoded.controlChannelHz, 854_387_500)
+    }
+}
